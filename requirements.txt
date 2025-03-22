@@ -7,3 +7,5 @@ bcrypt
 python-dotenv
 openai
 jinja2
+python==3.10.12
+pip==22.0.2
