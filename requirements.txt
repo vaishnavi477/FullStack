@@ -9,3 +9,4 @@ openai
 jinja2
 pip==22.0.2
 python-multipart
+pydantic
