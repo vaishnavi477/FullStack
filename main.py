@@ -15,7 +15,7 @@ from pydantic import BaseModel, EmailStr
 load_dotenv()
 
 # OpenAI API Key
-client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
+# client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
 
 # FastAPI setup
 app = FastAPI()
@@ -65,31 +65,31 @@ async def login_user(email: str = Form(...), password: str = Form(...), db: Sess
     return {"message": "Login successful", "user_id": db_user.id}
 
 
-@app.post("/generate-itinerary")
-async def generate_itinerary(destination: str = Form(...), interests: str = Form(...), start_date: str = Form(...), end_date: str = Form(...), budget: float = Form(...), db: Session = Depends(get_db)):
-    prompt = f"""
-    Create a travel itinerary for {destination} from {start_date} to {end_date} based on these interests: {interests}.
-    The budget is {budget}. Suggest attractions, activities, and dining options for each day.
-    """
+# @app.post("/generate-itinerary")
+# async def generate_itinerary(destination: str = Form(...), interests: str = Form(...), start_date: str = Form(...), end_date: str = Form(...), budget: float = Form(...), db: Session = Depends(get_db)):
+#     prompt = f"""
+#     Create a travel itinerary for {destination} from {start_date} to {end_date} based on these interests: {interests}.
+#     The budget is {budget}. Suggest attractions, activities, and dining options for each day.
+#     """
     
-    response = client.chat.completions.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": "You are a helpful travel assistant."},
-            {"role": "user", "content": prompt}
-        ],
-        max_tokens=250,
-        temperature=0.5
-    )
+#     response = client.chat.completions.create(
+#         model="gpt-4",
+#         messages=[
+#             {"role": "system", "content": "You are a helpful travel assistant."},
+#             {"role": "user", "content": prompt}
+#         ],
+#         max_tokens=250,
+#         temperature=0.5
+#     )
 
-    generated_itinerary = response.choices[0].message.content
+#     generated_itinerary = response.choices[0].message.content
 
-    itinerary = Itinerary(destination=destination, interests=interests, start_date=start_date, end_date=end_date, budget=budget, generated_itinerary=generated_itinerary)
-    db.add(itinerary)
-    db.commit()
-    db.refresh(itinerary)
+#     itinerary = Itinerary(destination=destination, interests=interests, start_date=start_date, end_date=end_date, budget=budget, generated_itinerary=generated_itinerary)
+#     db.add(itinerary)
+#     db.commit()
+#     db.refresh(itinerary)
     
-    return {"itinerary": generated_itinerary}
+#     return {"itinerary": generated_itinerary}
 
 @app.post("/logout")
 async def logout_user(db: Session = Depends(get_db)):
